@@ -1,0 +1,80 @@
+# This template is used to run an ansible play on AWS hosts
+
+# Required params
+# - playbookPath: The playbook path relative to ./ansible/. Example: plays/test-plays/test-icmpping-all.yml
+# - envCode: The AWS environment code. ie ss, prod. This is used to map to and AWS EC2 plugin inventory file - <envcode>.ec2.yml
+# - ansibleUser: The ansible username used to connect. This can be local or domain. If domain, specify as user@domain
+# - ansiblePassword: The password for the ansible user
+# - stageCode: Used as an identifier for stage names. The stage name will be called Ansible_<stageCode> . This can be used in other stages in the dependsOn parameter
+#
+# Optional params
+# - extraArguments: This can be used to provide extra ansible cmdline arguments. The main use for this would be to provide variables but can also be used to enable verbose modes.
+# - dependantStages: An array of stage names that need to run before the ansible stage
+
+parameters:
+  # Ansible parameters
+  playbookPath: '' # Playbook path relative to ./ansible/
+  envCode: '' # The environment code for the inventory plugin. ie. prod, ss
+  extraArguments: '' # This can be used to provide extra ansible cmdline arguments. The main use for this would be to provide variables but can also be used to enable verbose modes.
+  ansibleUser: '' # Username and password for running ansible playbook. User can be local (administrator) or domain user (user@domain.com)
+  ansiblePassword: ''
+  ansibleAuthType: 'ntlm' # Kerberos, CredSSP, NTLM etc - required for Ansible auth type depending on the type of play being run.
+  # Stage parameters
+  stageCode: '' # Used to build stage names
+  dependantStages: [] # An array of stage names that need to run first
+  # Parameters to connect to AWS
+  awsAccessKeyId: ''
+  awsSecretAccessKey: ''
+  awsRegion: ''
+
+
+stages:
+
+  - stage: Ansible_${{ parameters.stageCode }}
+    displayName: Ansible - ${{ parameters.deploymentName }}
+    dependsOn: ${{ parameters.dependantStages }}
+
+    jobs:
+
+      - deployment: JobAnsible
+        pool:
+          vmImage: ubuntu-latest
+        displayName: Run Ansible
+        environment: 'prod'
+        workspace:
+          clean: all
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+
+                - pwsh: |
+                    sudo pip install boto3 botocore
+                  displayName: Bootstrap agent
+
+                # Create inventory file for access via ansible domain account
+                - pwsh: |
+                    $(Pipeline.Workspace)/awslab/awslab/ansible/inventories/Build-OSConfigInventory.ps1 
+                  displayName: Build Ansible Inventory File
+                  env:
+                    ANSIBLE_USER: ${{ parameters.ansibleUser }}
+                    ANSIBLE_PASSWORD: ${{ parameters.ansiblePassword }}
+                    ANSIBLE_AUTH_TYPE: ${{ parameters.ansibleAuthType }}
+
+                - task: PowerShell@2
+                  displayName: Run Ansible
+                  inputs:
+                    pwsh: true
+                    targetType: inline
+                    script: |
+                      cd $(Pipeline.Workspace)/awslab/awslab/ansible
+                      ansible-playbook ${{ parameters.playbookPath }} -i inventories/${{ parameters.envCode }}.aws_ec2.yml -i inventories/os-config -i inventories/global ${{ parameters.extraArguments }}
+                  env:
+                    # Only secrets need to be manually mapped to env variables. Normal variables will automatically be mapped to env vars.
+                    # We also map AWS_ACCESS_KEY_ID, AWS_REGION as the variable name is different to what is required.
+                    AWS_ACCESS_KEY_ID: ${{ parameters.awsAccessKeyId }}
+                    AWS_SECRET_ACCESS_KEY: ${{ parameters.awsSecretAccessKey }}
+                    AWS_REGION: ${{ parameters.awsRegion }}
+                    ANSIBLE_FORCE_COLOR: 'True'
+
+                - template: ../_templates/step-clean-artifact-folder.yml

@@ -1,0 +1,11 @@
+
+steps:
+
+
+  # This step removes the artifact folder
+  - pwsh: |
+      $artifactFolder = '$(Pipeline.Workspace)/awslab/awslab'
+      Write-Host "Removing $artifactFolder"
+      $null = Remove-Item -Path $artifactFolder -Recurse -Force
+    displayName: Remove artifact
+    condition: always()

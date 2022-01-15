@@ -1,0 +1,68 @@
+# Pipeline to deploy shutdown/destroy environment
+
+name: Shutdown Environment
+
+variables:
+  # Variable group containing AWS credentials for account
+  - group: aws-pwrc-sam-exp
+
+trigger: none
+
+schedules:
+  - cron: "0 14 * * *"
+    always: true
+    displayName: Daily shutdown
+    branches:
+      include:
+      - master
+
+resources:
+  pipelines:
+    - pipeline: awslab
+      source: build - aws-lab artifact
+      branch: master
+
+pool:
+  vmImage: "windows-latest"
+  
+stages:
+  - stage: StgShutDown
+    displayName: Shutdown Environment
+    dependsOn: []
+    jobs:
+      - job: JobShutDown
+        displayName: Shutdown environment
+        steps:
+
+          - pwsh: |
+              Install-Module AWSPowershell.NetCore -Force
+            name: StepBootstrapAgent
+            displayName: Bootstrap Agent
+
+          - task: PowerShell@2
+            name: StepShutdownEC2
+            displayName: Shutdown EC2 instances
+            inputs:
+              pwsh: true
+              targetType: filePath
+              filePath: ./scripts/Stop-AllEC2.ps1
+            env:
+              # Only secrets need to be manually mapped to env variables. Normal variables will automatically be mapped to env vars.
+              # We also map AWS_ACCESS_KEY_ID, AWS_REGION as the variable name is different to what is required.
+              AWS_ACCESS_KEY_ID: $(aws-pwrc-sam-exp-username) # From AWS-pwrc-sam-exp
+              AWS_SECRET_ACCESS_KEY: $(aws-pwrc-sam-exp-secret) # From AWS-pwrc-sam-exp
+              AWS_REGION: $(aws-pwrc-sam-exp-region) # From AWS-pwrc-sam-exp
+
+  - template: _templates/destroy-terragrunt-config.yml
+    parameters:      
+      deploymentName: Route 53 Resolver
+      tgCloud: aws
+      tgAccountName: experimental
+      tgRegion: ap-southeast-2
+      tgEnvironment: prod
+      tgServiceName: route53-resolver
+      stageCode: core_vpc_resolver
+      awsAccessKeyId: $(aws-pwrc-sam-exp-username) # From AWS-pwrc-sam-exp
+      awsSecretAccessKey: $(aws-pwrc-sam-exp-secret) # From AWS-pwrc-sam-exp
+      awsRegion: $(aws-pwrc-sam-exp-region) # From AWS-pwrc-sam-exp
+              
