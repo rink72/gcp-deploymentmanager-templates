@@ -3,7 +3,7 @@
 [CmdletBinding()]
 param (
 	[Parameter()]
-	[String]$BucketName = "rink72-lab-infra"
+	[String]$BucketName = "rink72-lab-infra-2"
 )
 
 $ErrorActionPreference = "Stop"

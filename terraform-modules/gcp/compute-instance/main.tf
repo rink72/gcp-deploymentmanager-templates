@@ -2,11 +2,10 @@ locals {
   name = join("-", [substr(var.environment, 0, 1), var.app_code])
 
   labels = {
-    Terraform   = "true",
-    Owner       = var.owner,
-    Environment = var.environment
-    Workload    = var.workload
-    App-Code    = var.app_code
+    terraform   = "true",
+    owner       = var.owner,
+    environment = var.environment
+    appcode     = var.app_code
   }
 }
 
@@ -17,16 +16,10 @@ resource "google_compute_instance" "gci" {
   machine_type = var.machine_type
   zone         = var.zone
 
-  tags = var.tags
-
   boot_disk {
     initialize_params {
       image = var.image
     }
-  }
-
-  scratch_disk {
-    interface = "SCSI"
   }
 
   network_interface {
@@ -37,12 +30,7 @@ resource "google_compute_instance" "gci" {
     }
   }
 
-  metadata = local.labels
+  labels = local.labels
 
   metadata_startup_script = var.metadata_startup_script
-
-  service_account {
-    email  = google_service_account.default.email
-    scopes = ["cloud-platform"]
-  }
 }

@@ -11,6 +11,16 @@ locals {
 
 }
 
+generate "provider" {
+  path      = "provider.tf"
+  if_exists = "overwrite"
+  contents  = <<EOF
+provider "google" {
+  project = "${local.project_vars.project}"
+}
+EOF
+}
+
 # Configure Terragrunt to automatically store tfstate files in an GCS bucket
 remote_state {
   backend = "gcs"

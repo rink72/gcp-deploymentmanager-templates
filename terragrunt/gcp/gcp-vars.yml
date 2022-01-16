@@ -1,2 +1,5 @@
 environment: lab
 owner: rink72
+
+default_region: australia-southeast1
+default_zone: australia-southeast1-a

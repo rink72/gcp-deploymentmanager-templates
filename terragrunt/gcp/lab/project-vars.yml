@@ -1,2 +1,3 @@
-region: australia-southeast1
-state_bucket_name: rink72-lab-infra
+state_bucket_name: rink72-lab-infra-2
+
+project: playground-s-11-889632cb

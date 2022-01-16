@@ -12,7 +12,7 @@ param (
 
 	[String]$Service = $env:LAB_SERVICE,
 
-	[Bool]$PlanOnly = $false
+	[Switch]$Apply
 )
 
 try
@@ -51,7 +51,7 @@ try
 		throw "Terragrunt plan failed."
 	}
 
-	if (-not $PlanOnly)
+	if ($Apply)
 	{
 		Write-Host "Running terragrunt apply"
 

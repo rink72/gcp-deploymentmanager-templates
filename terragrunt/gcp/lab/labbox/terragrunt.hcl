@@ -17,10 +17,13 @@ include {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  app_code    = "gfna"
+  app_code    = "labbox"
   owner       = local.gcp_vars.owner
   environment = local.gcp_vars.environment
 
-  instance_type = "e2-medium"
+  machine_type  = "e2-medium"
   machine_count = 1
+  image         = "ubuntu-2104"
+
+  zone = local.gcp_vars.default_zone
 }
