@@ -16,7 +16,7 @@ generate "provider" {
   if_exists = "overwrite"
   contents  = <<EOF
 provider "google" {
-  project = "${local.project_vars.project}"
+  project = "${get_env("GCP_TF_PROJECT")}"
 }
 EOF
 }
@@ -26,7 +26,7 @@ remote_state {
   backend = "gcs"
 
   config = {
-    bucket = local.project_vars.state_bucket_name
+    bucket = get_env("GCP_TF_STATE_BUCKET")
     prefix = "${path_relative_to_include()}"
   }
 }

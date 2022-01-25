@@ -8,7 +8,7 @@
 
 [CmdletBinding()]
 param (
-	[String]$Project = $env:LAB_PROJECT,
+	[String]$Project = "lab",
 
 	[String]$Service = $env:LAB_SERVICE,
 
@@ -37,7 +37,7 @@ try
 	# Build path for terragrunt config file
 	$TerragruntPath = Join-Path `
 		-Path $PSScriptRoot `
-		-ChildPath "gcp" `
+		-ChildPath "..\gcp" `
 		-AdditionalChildPath @($Project, $Service)
 
 	Write-Host "Setting location to $TerragruntPath"

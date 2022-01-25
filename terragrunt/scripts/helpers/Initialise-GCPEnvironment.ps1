@@ -31,4 +31,5 @@ else
 	Write-Host "State bucket <$ProjectName> created"
 }
 
-$env:GCP_STATE_BUCKET = $ProjectName
+$env:GCP_TF_STATE_BUCKET = $ProjectName
+$env:GCP_TF_PROJECT = $ProjectName
