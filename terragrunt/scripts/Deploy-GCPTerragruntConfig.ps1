@@ -17,6 +17,9 @@ param (
 
 try
 {
+	# Ensure environment is initialised
+	. "$PSScriptRoot/helpers/Initialise-GCPEnvironment.ps1"
+
 	# Set env var to tell Terraform it's running in automation pipeline
 	$env:TF_IN_AUTOMATION = "true"
 

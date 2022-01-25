@@ -1,6 +1,4 @@
 locals {
-  name = join("-", [substr(var.environment, 0, 1), var.app_code])
-
   labels = {
     terraform   = "true",
     owner       = var.owner,
@@ -12,7 +10,7 @@ locals {
 resource "google_compute_instance" "gci" {
   count = var.machine_count
 
-  name         = format("%s%02d", local.name, count.index + 1)
+  name         = format("%s%02d", var.appcode, count.index + 1)
   machine_type = var.machine_type
   zone         = var.zone
 
