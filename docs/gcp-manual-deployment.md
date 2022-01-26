@@ -1,6 +1,6 @@
 # GCP manual deployment
 
-# Prerequisites
+## Prerequisites
 
 - The Google SDK must be installed. This can be downloaded from [here](https://cloud.google.com/sdk/docs/install)
 - The Google Cloud Powershell module must be installed. Documentation on this can be found [here](https://cloud.google.com/tools/powershell/docs/quickstart)
@@ -21,12 +21,12 @@ Once authenticated, you can now deploy a service using `Deploy-GCPTerragruntConf
 ```powershell
 # Show terraform plan
 .\Deploy-GCPTerragruntConfig.ps1 `
-	-Service labbox
+    -Service labbox
 
 # Apply terraform configuration
 .\Deploy-GCPTerragruntConfig.ps1 `
-	-Service labbox `
-	-Apply
+    -Service labbox `
+    -Apply
 ```
 
 ## Notes

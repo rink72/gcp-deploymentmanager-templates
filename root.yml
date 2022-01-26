@@ -1,2 +1,4 @@
-# This file is used as an anchor for terragrunt to find the root of the repo. It is not used for anything else.
-{}
+---
+# This file is used as an anchor for terragrunt to find the root of the repo.
+# It is not used for anything else.
+{ }

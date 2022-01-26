@@ -1,9 +1,9 @@
 # Lab infrastructure
 
-This repo holds infrastructure configuration for different lab environments that can be configured across AWS, GCP and Azure.
+This repository holds infrastructure configuration for different lab environments that can be configured across AWS, GCP and Azure.
 It has been designed to be used mainly with acloud.guru's [sandbox environments](https://learn.acloud.guru/cloud-playground/cloud-sandboxes) rather than long standing accounts/projects/subscriptions which is why the structure does not conform to what you might normally see.
 
-# Deployment
+## Deployment
 
 ## Manual
 
