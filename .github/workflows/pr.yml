@@ -1,5 +1,5 @@
 ---
-name: Lint Code Base
+name: PR verification
 
 on: push
   # push:
