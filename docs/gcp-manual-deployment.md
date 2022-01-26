@@ -1,6 +1,6 @@
 # GCP manual deployment
 
-# Prerequisites
+## Prerequisites
 
 - The Google SDK must be installed. This can be downloaded from [here](https://cloud.google.com/sdk/docs/install)
 - The Google Cloud Powershell module must be installed. Documentation on this can be found [here](https://cloud.google.com/tools/powershell/docs/quickstart)

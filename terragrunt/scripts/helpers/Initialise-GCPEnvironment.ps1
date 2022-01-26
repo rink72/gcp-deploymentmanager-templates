@@ -1,6 +1,7 @@
 #Requires -Modules GoogleCloud
 
 [CmdletBinding()]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
 param ()
 
 $ErrorActionPreference = "Stop"

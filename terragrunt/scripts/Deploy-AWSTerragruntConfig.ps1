@@ -7,6 +7,7 @@
 # $LASTEXITCODE on operations to make sure there's no failure.
 
 [CmdletBinding()]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
 param (
     [string]
     $AccountName = $env:tgAccountName,
