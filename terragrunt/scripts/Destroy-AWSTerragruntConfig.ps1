@@ -14,7 +14,7 @@ param (
 
     [string]
     $Region = $env:tgRegion,
-    
+
     [string]
     $Environment = $env:tgEnvironment,
 
@@ -43,4 +43,3 @@ Write-Host 'Running terragrunt destroy'
 if ($LASTEXITCODE -ne 0) {
     throw "Terragrunt destroy failed."
 }
-
