@@ -21,12 +21,12 @@ Once authenticated, you can now deploy a service using `Deploy-GCPTerragruntConf
 ```powershell
 # Show terraform plan
 .\Deploy-GCPTerragruntConfig.ps1 `
-	-Service labbox
+    -Service labbox
 
 # Apply terraform configuration
 .\Deploy-GCPTerragruntConfig.ps1 `
-	-Service labbox `
-	-Apply
+    -Service labbox `
+    -Apply
 ```
 
 ## Notes
