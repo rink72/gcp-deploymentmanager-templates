@@ -11,7 +11,7 @@
 param (
 	[String]$Project = "labrink72",
 
-	[String]$Service = $env:LAB_SERVICE,
+	[String]$Service = $env:SERVICE,
 
 	[Switch]$Apply
 )

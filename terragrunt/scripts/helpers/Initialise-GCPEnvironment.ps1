@@ -19,7 +19,7 @@ if (-not $TargetProject)
 	throw "Project <$Project> not found"
 }
 
-$ExistingBucket = Get-GcsBucket | Where-Object { $_.Name -eq $Project }
+$ExistingBucket = Get-GcsBucket -Project $Project | Where-Object { $_.Name -eq $Project }
 
 if ($ExistingBucket)
 {
