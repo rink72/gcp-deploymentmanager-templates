@@ -16,7 +16,7 @@ ForEach ($Path in $Libraries)
 	{
 		try
 		{
-			Write-Verbose "Importing <$($Library.FullName)>"
+			Write-Host "Importing <$($Library.FullName)>"
 
 			Import-Module `
 				-Name $Library.FullName `
