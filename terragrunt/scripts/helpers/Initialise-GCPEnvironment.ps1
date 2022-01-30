@@ -2,7 +2,9 @@
 
 [CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
-param ()
+param (
+	[String]$Project
+)
 
 $ErrorActionPreference = "Stop"
 
@@ -10,15 +12,14 @@ Import-Module `
 	-Name GoogleCloud `
 	-Force
 
-# We are coding this to work in ACloudGuru playground environments
-$ProjectName = (Get-GcpProject | Where-Object { $_.Name -like "playground*" }).Name
+$TargetProject = Get-GcpProject -Name $Project
 
-if ($ProjectName.count -gt 1)
+if (-not $TargetProject)
 {
-	throw "More than one possible project found. $ProjectName"
+	throw "Project <$Project> not found"
 }
 
-$ExistingBucket = Get-GcsBucket | Where-Object { $_.Name -eq $ProjectName }
+$ExistingBucket = Get-GcsBucket | Where-Object { $_.Name -eq $Project }
 
 if ($ExistingBucket)
 {
@@ -26,11 +27,7 @@ if ($ExistingBucket)
 }
 else
 {
-	New-GcsBucket `
-		-Name $ProjectName | Out-Null
+	New-GcsBucket -Name $Project | Out-Null
 
 	Write-Host "State bucket <$ProjectName> created"
 }
-
-$env:GCP_TF_STATE_BUCKET = $ProjectName
-$env:GCP_TF_PROJECT = $ProjectName
