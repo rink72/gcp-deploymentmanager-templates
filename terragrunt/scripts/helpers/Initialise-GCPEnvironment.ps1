@@ -23,11 +23,11 @@ $ExistingBucket = Get-GcsBucket -Project $Project | Where-Object { $_.Name -eq $
 
 if ($ExistingBucket)
 {
-	Write-Host "State bucket <$ProjectName> already exists"
+	Write-Host "State bucket <$Project> already exists"
 }
 else
 {
 	New-GcsBucket -Name $Project | Out-Null
 
-	Write-Host "State bucket <$ProjectName> created"
+	Write-Host "State bucket <$Project> created"
 }
