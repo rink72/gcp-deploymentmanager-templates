@@ -6,7 +6,7 @@ Sets required terraform environment variables
 Sets required terraform environment variables
 #>
 
-Function Set-TerraformEnvironment
+function Set-TerraformEnvironment
 {
 	[CmdletBinding()]
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]

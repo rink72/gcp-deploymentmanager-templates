@@ -1,11 +1,3 @@
-# This script takes parameters used to build the filepath to start a terragrunt deployment.
-# It is required that this script be at the root of the Terragrunt parameters folder.
-# It is designed to be run in ADO with parameter values set by variables
-
-# NOTE: Due to the way Powershell and ADO handles stderr/redirection, this task
-# needs to be run in ErrorActionPreference = "Continue" and then we check
-# $LASTEXITCODE on operations to make sure there's no failure.
-
 [CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
 param (
