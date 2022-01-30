@@ -6,11 +6,14 @@ $Libraries = @(
 
 ForEach ($Path in $Libraries)
 {
+	Write-Host "Checking $Path folder"
 	$TargetLibraries = Get-ChildItem `
 		-Path (Join-Path -Path $PSScriptRoot -ChildPath $Path) `
 		-Filter *.ps1 `
 		-Recurse `
 		-ErrorAction Stop
+
+	Write-Host ($TargetLibraries | Out-String)
 
 	ForEach ($Library in $TargetLibraries)
 	{
