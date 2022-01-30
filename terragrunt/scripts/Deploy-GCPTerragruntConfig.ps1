@@ -9,29 +9,25 @@
 [CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
 param (
+	[Parameter(Mandatory = $False)]
 	[String]$Project = "labrink72",
 
+	[Parameter(Mandatory = $False)]
 	[String]$Service = $env:SERVICE,
 
+	[Parameter(Mandatory = $False)]
 	[Switch]$Apply
 )
 
 try
 {
-	# Ensure environment is initialised
-	. "$PSScriptRoot/helpers/Initialise-GCPEnvironment.ps1" -Project $Project
+	# Import helper scripts. We should eventually move all this code to a
+	# PowerShell module
+	. "$PSScriptRoot/Helpers.ps1"
 
-	# Set env var to tell Terraform it's running in automation pipeline
-	$env:TF_IN_AUTOMATION = "true"
+	Initialize-GCPEnvironment -Project $Project
 
-	# Create a low-level folder for the TG cache so that we don"t run in to errors with long files names
-	$TGCachePath = "c:\tgcache"
-	$null = New-Item `
-		-Path $TGCachePath `
-		-ItemType Directory `
-		-Force
-
-	$env:TERRAGRUNT_DOWNLOAD = $TGCachePath
+	Set-TerraformEnvironment
 
 	$CurrentPath = $PSScriptRoot
 

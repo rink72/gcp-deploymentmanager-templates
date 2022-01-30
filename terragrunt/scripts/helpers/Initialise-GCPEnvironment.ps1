@@ -1,33 +1,48 @@
 #Requires -Modules GoogleCloud
 
-[CmdletBinding()]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
-param (
-	[String]$Project
-)
+<#
+.SYNOPSIS
+Ensures target project exists and creates state bucket if it does not already exist
 
-$ErrorActionPreference = "Stop"
+.DESCRIPTION
+Ensures target project exists and creates state bucket if it does not already exist
+#>
 
-Import-Module `
-	-Name GoogleCloud `
-	-Force
-
-$TargetProject = Get-GcpProject -Name $Project
-
-if (-not $TargetProject)
+function Initialize-GCPEnvironment
 {
-	throw "Project <$Project> not found"
-}
+	[CmdletBinding()]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
+	param (
+		[Parameter(Mandatory = $True)]
+		[String]$Project
+	)
 
-$ExistingBucket = Get-GcsBucket -Project $Project | Where-Object { $_.Name -eq $Project }
+	Import-Module `
+		-Name GoogleCloud `
+		-Force `
+		-ErrorAction Stop
 
-if ($ExistingBucket)
-{
-	Write-Host "State bucket <$Project> already exists"
-}
-else
-{
-	New-GcsBucket -Name $Project | Out-Null
+	$TargetProject = Get-GcpProject `
+		-Name $Project `
+		-ErrorAction Stop
 
-	Write-Host "State bucket <$Project> created"
+	if (-not $TargetProject)
+	{
+		throw "Project <$Project> not found"
+	}
+
+	$ExistingBucket = Get-GcsBucket `
+		-Project $Project `
+		-ErrorAction Stop | Where-Object { $_.Name -eq $Project }
+
+	if ($ExistingBucket)
+	{
+		Write-Host "State bucket <$Project> already exists"
+	}
+	else
+	{
+		New-GcsBucket -Name $Project | Out-Null
+
+		Write-Host "State bucket <$Project> created"
+	}
 }
