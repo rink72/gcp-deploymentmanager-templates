@@ -1,37 +1,25 @@
-# This script takes parameters used to build the filepath to start a terragrunt deployment.
-# It is required that this script be at the root of the Terragrunt parameters folder.
-# It is designed to be run in ADO with parameter values set by variables
-
-# NOTE: Due to the way Powershell and ADO handles stderr/redirection, this task
-# needs to be run in ErrorActionPreference = "Continue" and then we check
-# $LASTEXITCODE on operations to make sure there's no failure.
-
 [CmdletBinding()]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
 param (
-	[String]$Project = "lab",
+	[Parameter(Mandatory = $False)]
+	[String]$Project = "labrink72",
 
-	[String]$Service = $env:LAB_SERVICE,
+	[Parameter(Mandatory = $False)]
+	[String]$Service = $env:SERVICE,
 
+	[Parameter(Mandatory = $False)]
 	[Switch]$Apply
 )
 
 try
 {
-	# Ensure environment is initialised
-	. "$PSScriptRoot/helpers/Initialise-GCPEnvironment.ps1"
+	# Import helper scripts. We should eventually move all this code to a
+	# PowerShell module
+	. "$PSScriptRoot/Helpers.ps1"
 
-	# Set env var to tell Terraform it's running in automation pipeline
-	$env:TF_IN_AUTOMATION = "true"
+	Initialize-GCPEnvironment -Project $Project
 
-	# Create a low-level folder for the TG cache so that we don"t run in to errors with long files names
-	$TGCachePath = "c:\tgcache"
-	$null = New-Item `
-		-Path $TGCachePath `
-		-ItemType Directory `
-		-Force
-
-	$env:TERRAGRUNT_DOWNLOAD = $TGCachePath
+	Set-TerraformEnvironment
 
 	$CurrentPath = $PSScriptRoot
 
