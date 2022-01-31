@@ -29,6 +29,6 @@ function Set-TerraformEnvironment
 
 		Set-Item `
 			-Path Env:\TERRAGRUNT_DOWNLOAD `
-			-Value "true"
+			-Value $TGCachePath
 	}
 }
