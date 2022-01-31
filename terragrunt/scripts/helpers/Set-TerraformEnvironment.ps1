@@ -8,13 +8,15 @@ Sets required terraform environment variables
 
 function Set-TerraformEnvironment
 {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess)]
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingWriteHost", "", Justification = "Required by design")]
 	param ()
 	# Set env var to tell Terraform it's running in automation pipeline
-	$env:TF_IN_AUTOMATION = "true"
+	Set-Item `
+		-Path Env:\TF_IN_AUTOMATION `
+		-Value "true"
 
-	# Create a low-level folder for the TG cache 
+	# Create a low-level folder for the TG cache
 	# so that we don"t run in to errors with long files names
 	# This only affects windows
 	if ($IsWindows)
@@ -25,6 +27,8 @@ function Set-TerraformEnvironment
 			-ItemType Directory `
 			-Force
 
-		$env:TERRAGRUNT_DOWNLOAD = $TGCachePath
+		Set-Item `
+			-Path Env:\TERRAGRUNT_DOWNLOAD `
+			-Value "true"
 	}
 }
