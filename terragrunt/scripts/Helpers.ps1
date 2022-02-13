@@ -4,6 +4,8 @@ $Libraries = @(
 	"Helpers"
 )
 
+Write-Host "Running helpers.ps1"
+
 ForEach ($Path in $Libraries)
 {
 	$TargetLibraries = Get-ChildItem `
