@@ -15,7 +15,6 @@ try
 {
 	# Import helper scripts. We should eventually move all this code to a
 	# PowerShell module
-	Write-Host "$PSScriptRoot/Helpers.ps1"
 	. "$PSScriptRoot/Helpers.ps1"
 
 	Initialize-GCPEnvironment -Project $Project
