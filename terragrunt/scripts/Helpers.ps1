@@ -1,7 +1,7 @@
 #region Libraries
 
 $Libraries = @(
-	"Helpers"
+	"helpers"
 )
 
 Write-Host "Running helpers.ps1"
