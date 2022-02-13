@@ -4,8 +4,6 @@ $Libraries = @(
 	"helpers"
 )
 
-Write-Host "Running helpers.ps1"
-
 ForEach ($Path in $Libraries)
 {
 	$TargetLibraries = Get-ChildItem `
@@ -14,13 +12,11 @@ ForEach ($Path in $Libraries)
 		-Recurse `
 		-ErrorAction Stop
 
-	Write-Host $TargetLibraries
-
 	ForEach ($Library in $TargetLibraries)
 	{
 		try
 		{
-			Write-Host "Importing <$($Library.FullName)>"
+			Write-Verbose "Importing <$($Library.FullName)>"
 
 			Import-Module `
 				-Name $Library.FullName `
