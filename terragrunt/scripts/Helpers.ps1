@@ -14,6 +14,8 @@ ForEach ($Path in $Libraries)
 		-Recurse `
 		-ErrorAction Stop
 
+	Write-Host $TargetLibraries
+
 	ForEach ($Library in $TargetLibraries)
 	{
 		try
