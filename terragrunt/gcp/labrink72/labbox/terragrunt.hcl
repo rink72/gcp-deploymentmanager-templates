@@ -23,7 +23,7 @@ inputs = {
 
   machine_type  = "e2-medium"
   machine_count = 1
-  image         = "ubuntu-2104"
+  image         = "ubuntu-2110"
 
   zone = local.gcp_vars.default_zone
 }
