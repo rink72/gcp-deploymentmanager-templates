@@ -1,7 +1,7 @@
 #region Libraries
 
 $Libraries = @(
-	"Helpers"
+	"helpers"
 )
 
 ForEach ($Path in $Libraries)
